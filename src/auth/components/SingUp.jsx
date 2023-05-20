@@ -22,10 +22,11 @@ import React, { useState } from "react";
 
 function SingUp() {
   const [show, setShow] = useState(false);
-
-  const [username, SetUsername] = useState("");
-  const [email, SetEmail] = useState("");
   const [password, SetPassword] = useState("");
+  const [surname, Setsurname] = useState("");
+  const [email, SetEmail] = useState("");
+  const [ci, SetCi] = useState("");
+  const [centro_id, SetCentroid] = useState("");
 
   const handleClick = () => setShow(!show);
 
@@ -33,9 +34,11 @@ function SingUp() {
     e.preventDefault();
 
     const newUser = {
-      username: username,
+      surname: surname,
       email: email,
       password: password,
+      ci: ci,
+      centro_id : centro_id
     };
 
     
@@ -44,21 +47,76 @@ function SingUp() {
 
     SetEmail("");
     SetPassword("");
-    SetUsername("");
+    Setsurname("");
+    SetCi("");
+    SetCentroid("");
   };
+
+
+
+
+  const postData = async (nombre, apellido,password,email, ci,centro_id) => {
+    let rolecompuesto = "Profesor"
+    if(type === "Estudiante") { rolecompuesto=`Estudiante_${nom_prof}_${ape_prof}`;}
+   
+    const url = "https://proyectobd.onrender.com";
+    const response = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify({
+        name: nombre,
+        surname: apellido,
+        password: password,
+         email: email,
+        ci:  ci,
+        centro_id: centro_id 
+      }),
+      headers: {
+        "content-type": "application/json",
+      },
+    })
+    
+    return response.json();
+  };
+
+
+
+
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <FormControl isRequired>
-          <FormLabel>Username</FormLabel>
+          <FormLabel>Apellido</FormLabel>
           <Input
-            value={username}
+            value={surname}
             onChange={(e) => {
-              SetUsername(e.target.value);
+              Setsurname(e.target.value);
             }}
           />
         </FormControl>
+
+        <FormControl  mt="10px" isRequired>
+          <FormLabel>Centro Id</FormLabel>
+          <Input
+            value={centro_id}
+            onChange={(e) => {
+              SetCentroid(e.target.value);
+            }}
+          />
+        </FormControl>
+
+        <FormControl  mt="10px" isRequired>
+          <FormLabel>CI</FormLabel>
+          <Input
+          type="number"
+            value={ci}
+            onChange={(e) => {
+              SetCi(e.target.value);
+            }}
+          />
+        </FormControl>
+
+
         <FormControl mt="10px" isRequired>
           <FormLabel>Email address</FormLabel>
           <Input
