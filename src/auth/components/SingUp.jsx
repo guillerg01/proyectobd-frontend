@@ -41,7 +41,7 @@ function SingUp() {
       centro_id : centro_id
     };
 
-    
+    postData(newUser);
 
     console.log(newUser);
 
@@ -55,9 +55,8 @@ function SingUp() {
 
 
 
-  const postData = async (nombre, apellido,password,email, ci,centro_id) => {
-    let rolecompuesto = "Profesor"
-    if(type === "Estudiante") { rolecompuesto=`Estudiante_${nom_prof}_${ape_prof}`;}
+  const postData = async ({nombre, apellido,password,email, ci,centro_id}) => {
+    
    
     const url = "https://proyectobd.onrender.com";
     const response = await fetch(url, {
@@ -73,7 +72,7 @@ function SingUp() {
       headers: {
         "content-type": "application/json",
       },
-    })
+    }).then((e)=>{console.log(e)})
     
     return response.json();
   };
