@@ -31,34 +31,33 @@ function SingIn(){
 
   const navigate = useNavigate();
   const [password, SetPassword] = useState("");
-  const [username, Setusername] = useState("");
   const [email, SetEmail] = useState("");
   const handleClickdone = ()=>{
     const newUser = {
-      surname: username,
+      
       email: email,
       password: password
     };
 
-    const postData = async ({username,password,email, ci,}) => {
+    const postData = async ({password,email}) => {
     
    
-      const url = "https://proyectobd.onrender.com";
+      const url = "https://proyectobd.onrender.com/api/auth/login";
       const response = await fetch(url, {
         method: "POST",
         body: JSON.stringify({
           
-          username: username,
+         
           password: password,
            email: email,
-          ci:  ci,
-          centro_id: centro_id 
+         
         }),
         headers: {
           "content-type": "application/json",
         },
-      }).then((e)=>{console.log(e)})
-      
+      })
+      const data = await response.json();
+console.log(data);
       return response.json();
     };
   
@@ -67,25 +66,25 @@ function SingIn(){
 console.log(newUser)
 
 
- if(email.value==="admin"&&pass.value==="admin"){
+//  if(email.value==="admin"&&pass.value==="admin"){
   
-  enqueueSnackbar("Hecho"),{
-    persist: false,
-    variant:"success"
-  }; 
-    navigate("/dashboard",
-    {
-      replace: true
-    });
- }
- else( enqueueSnackbar("Error de Usuario o Contraseña"),{
-  persist: false,
-  variant: "error"
-} )
-
+//   enqueueSnackbar("Hecho"),{
+//     persist: false,
+//     variant:"success"
+//   }; 
+//     navigate("/dashboard",
+//     {
+//       replace: true
+//     });
+//  }
+//  else( enqueueSnackbar("Error de Usuario o Contraseña"),{
+//   persist: false,
+//   variant: "error"
+// } )
+postData(newUser)
 SetEmail("");
     SetPassword("");
-    Setusername("");
+   
   }
 
   const [show, setShow] = useState(false);
@@ -95,16 +94,8 @@ SetEmail("");
        
         <Stack >
 
-<FormControl  mt="10px" isRequired>
-          <FormLabel>username</FormLabel>
-          <Input
-          
-            value={username}
-            onChange={(e) => {
-              Setusername(e.target.value);
-            }}
-          />
-        </FormControl>
+
+    
                  <FormControl mt="10px" isRequired>
           <FormLabel>Email address</FormLabel>
           <Input
