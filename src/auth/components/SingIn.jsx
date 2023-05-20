@@ -30,7 +30,43 @@ import { enqueueSnackbar } from "notistack";
 function SingIn(){
 
   const navigate = useNavigate();
+  const [password, SetPassword] = useState("");
+  const [username, Setusername] = useState("");
+  const [email, SetEmail] = useState("");
   const handleClickdone = ()=>{
+    const newUser = {
+      surname: username,
+      email: email,
+      password: password
+    };
+
+    const postData = async ({username,password,email, ci,}) => {
+    
+   
+      const url = "https://proyectobd.onrender.com";
+      const response = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify({
+          
+          username: username,
+          password: password,
+           email: email,
+          ci:  ci,
+          centro_id: centro_id 
+        }),
+        headers: {
+          "content-type": "application/json",
+        },
+      }).then((e)=>{console.log(e)})
+      
+      return response.json();
+    };
+  
+
+
+console.log(newUser)
+
+
  if(email.value==="admin"&&pass.value==="admin"){
   
   enqueueSnackbar("Hecho"),{
@@ -47,6 +83,9 @@ function SingIn(){
   variant: "error"
 } )
 
+SetEmail("");
+    SetPassword("");
+    Setusername("");
   }
 
   const [show, setShow] = useState(false);
@@ -55,14 +94,35 @@ function SingIn(){
     return(
        
         <Stack >
-                <FormControl >
-                  <FormLabel>Email address</FormLabel>
-                  <Input id="email" type="email" />
-                  <FormHelperText>We'll never share your email.</FormHelperText>
-                </FormControl>
+
+<FormControl  mt="10px" isRequired>
+          <FormLabel>username</FormLabel>
+          <Input
+          
+            value={username}
+            onChange={(e) => {
+              Setusername(e.target.value);
+            }}
+          />
+        </FormControl>
+                 <FormControl mt="10px" isRequired>
+          <FormLabel>Email address</FormLabel>
+          <Input
+            value={email}
+            type="email"
+            onChange={(e) => {
+              SetEmail(e.target.value);
+            }}
+          />
+          <FormHelperText>We'll never share your email.</FormHelperText>
+        </FormControl>
                 
                 <InputGroup  size="md">
                   <Input id="pass"
+                  value={password}
+                  onChange={(e) => {
+                    SetPassword(e.target.value);
+                  }}
                    pr="4.5rem"
                     type={show ? "text" : "password"}
                     placeholder="Enter password"
