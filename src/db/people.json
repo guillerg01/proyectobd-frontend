@@ -1,0 +1,95 @@
+{
+  "people": [
+    {
+      "id": 1,
+      "name": "Pedro",
+      "surname": "Rodriguez",
+      "role": "Profesor",
+      "usuario": "Pedro",
+      "password": "pedrito",
+      "value": 1,
+      "asignatura": "Matematica",
+      "facultad": 3,
+      "ano": 3,
+      "email": "pedrito@gmail.com"
+    },
+    {
+      "id": 2,
+      "name": "Juan",
+      "surname": "Perez",
+      "role": "Estudiante_Pedro_Rodriguez",
+      "usuario": "Juan",
+      "password": "Juan",
+      "value": 2,
+      "asignatura": "Matematica",
+      "facultad": 3,
+      "ano": 3,
+      "email": "Juan@gmail.com"
+    },
+    {
+      "id": 3,
+      "name": "Guillermo",
+      "surname": "Galban",
+      "role": "Estudiante_Pedro_Rodriguez",
+      "usuario": "Guillermo",
+      "password": "Guillermo",
+      "value": 3,
+      "asignatura": "Matematica",
+      "facultad": 3,
+      "ano": 3,
+      "email": "guillermo@gmail.com"
+    },
+    {
+      "id": 4,
+      "name": "Pangolin",
+      "surname": "ALmeira",
+      "role": "Estudiante_Pedro_Rodriguez",
+      "usuario": "Pangolin",
+      "password": "Pangolin",
+      "value": 1,
+      "asignatura": "Matematica",
+      "facultad": 3,
+      "ano": 3,
+      "email": "pangolin@gmail.com"
+    },
+    {
+      "id": 5,
+      "name": "Cynthia",
+      "surname": "Gonzales",
+      "role": "Estudiante_Pedro_Rodriguez",
+      "usuario": "Cynthia",
+      "password": "Cynthia",
+      "value": 1,
+      "asignatura": "Matematica",
+      "facultad": 4,
+      "ano": 2,
+      "email": "cynthia@gmail.com"
+    },
+    {
+      "id": 6,
+      "name": "David",
+      "surname": "Pascual",
+      "role": "Estudiante_Pedro_Rodriguez",
+      "usuario": "David",
+      "password": "David",
+      "value": 1,
+      "asignatura": "Matematica",
+      "facultad": 3,
+      "ano": 3,
+      "email": "david@gmail.com"
+    },
+    {
+      "name": "Prueba1",
+      "surname": "EEEE",
+      "usuario": "guille",
+      "password": "yjfyjf",
+      "role": "Estudiante_Pedro_Rodriguez",
+      "id": 7,
+      "value": 1,
+      "asignatura": "Matematica",
+      "facultad": 3,
+      "ano": 3,
+      "email": "prueba@gmail.com"
+    }
+  ]
+}
