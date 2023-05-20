@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import AuthContext from "./AuthToken";
+import { useContext } from "react";
 import {
   Stack,
   Box,
@@ -29,6 +31,7 @@ import { enqueueSnackbar } from "notistack";
 
 function SingIn(){
 
+  const auth = useContext(AuthContext)
   const navigate = useNavigate();
   const [password, SetPassword] = useState("");
   const [email, SetEmail] = useState("");
@@ -57,6 +60,7 @@ function SingIn(){
         },
       })
       const data = await response.json();
+      // auth.setTokenauth.setToken(data.token)
 console.log(data);
       return response.json();
     };
