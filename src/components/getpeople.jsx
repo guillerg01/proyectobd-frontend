@@ -4,18 +4,14 @@ import axiosapi from "./axiosapi";
 import { SimpleGrid, Box ,TableContainer,Table,TableCaption,Thead,Tr,Th,Tbody,Tfoot} from "@chakra-ui/react";
 import { useQuery } from "react-query";
 import {ContenTable}  from "./Contentable"
+import axios from "axios";
+import { useCookies } from 'react-cookie';
 
 import { Spinner } from "react-bootstrap";
 
 export const Getpeople = ({profesor,esajustes}) => {
-  
- // const get = async () => {
-//const url = "https://jsonplaceholder.typicode.com/posts";
- //   const resp = await fetch(url);
-
- //   return await resp.json();
- //   setdata(data);
- // };// no lo use
+  const [cookies] = useCookies(['token']);
+ 
 
   const {
     data: array,
@@ -23,16 +19,21 @@ export const Getpeople = ({profesor,esajustes}) => {
     isLoading,
     error,
     isPreviousData
-  } = useQuery(["dataList"], () =>
-    fetch("http://localhost:3000/people").then((res) =>
+  } = useQuery(["dataList"], () =>{
+  const res2 = axios.get('https://proyectobd.onrender.com/api/user/list', {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization" : `Bearer ${cookies.token}`
+  }
+    }).then((res) =>
 
-    res.json()
-    ), {
+    console.log(res)
+    )}, {
       keepPreviousData: true,
-      refetchInterval: 5000
+      
     }
   );
-
+  
  
 
 

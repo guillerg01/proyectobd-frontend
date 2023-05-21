@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import AuthContext from "./AuthToken";
 import { useContext } from "react";
+import { useCookies } from 'react-cookie';
 import {
   Stack,
 
@@ -32,7 +33,7 @@ function SingIn(){
   const navigate = useNavigate();
   const [password, SetPassword] = useState("");
   const [email, SetEmail] = useState("");
-  
+  const [cookies, setCookie] = useCookies(['token']);
   
   const handleClickdone = ()=>{
     
@@ -44,69 +45,49 @@ function SingIn(){
     })
       .then((response) => {
          
-              //auth.setToken(response.data.token)
+        setCookie('token', `${response.data.token}`, { path: '/' });
               console.log(response.data.token);
               const res2 = axios.get('https://proyectobd.onrender.com/api/user/profile', {
               headers: {
                 "Content-Type": "application/json",
-                "Authorization" : `${response.data.token}`
+                "Authorization" : `Bearer ${response.data.token}`
             }
               }).then((response) => {
-                console.log(response);
+               if( response.data.result.role==="admin" ){
+
+                enqueueSnackbar("Hecho"),{
+                      persist: false,
+                      variant:"success"
+                    }; 
+                      navigate("/dashboard",
+                      {
+                        replace: true
+                      });
+               }else{
+                enqueueSnackbar("Error de Usuario o Contraseña"),{
+                  persist: false,
+                  variant:"error"
+                }; 
+                  navigate("/estudiantes",
+                  {
+                    replace: true
+                  });
+
+
+
+               }
 
               }).catch((error) => {console.error(error)});
         
       })
       .catch((error) => {
-        console.error(error);
+        enqueueSnackbar("Error de Usuario o Contraseña"),{
+            persist: false,
+            variant: "error"
+          } 
       });
 
 
-
-
-//     const postData = async ({password,email}) => {
-    
-   
-//       const url = "https://proyectobd.onrender.com/api/auth/login";
-//       const response = await fetch(url, {
-//         method: "POST",
-//         body: JSON.stringify({
-          
-         
-//           password: password,
-//            email: email,
-         
-//         }),
-//         headers: {
-//           "content-type": "application/json",
-//         },
-//       })
-//       const data = await response.json();
-//        auth.setTokenauth.setToken(data.token)
-// console.log(data);
-//       return response.json();
-//     };
-  
-
-
-
-
-
-//  if(email.value==="admin"&&pass.value==="admin"){
-  
-//   enqueueSnackbar("Hecho"),{
-//     persist: false,
-//     variant:"success"
-//   }; 
-//     navigate("/dashboard",
-//     {
-//       replace: true
-//     });
-//  }
-//  else( enqueueSnackbar("Error de Usuario o Contraseña"),{
-//   persist: false,
-//   variant: "error"
-// } )
 
 SetEmail("");
     SetPassword("");
