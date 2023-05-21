@@ -34,7 +34,7 @@ export const Getpeople = ({profesor,esajustes}) => {
     }
   );
   
- 
+ console.log(cookies.token)
 
 
   // const [state, setState] = useState("")

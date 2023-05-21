@@ -15,6 +15,7 @@ import {
   import { useState } from 'react'
   import { Add } from './add'
 import { useNavigate } from 'react-router-dom'
+import { Addothers } from './addothers'
 
 
   export function DrawerComponent({isOpen,onClose}){
@@ -43,7 +44,7 @@ const handleclickbuttondashboard = () => {navigate("/dashboard")}
                 </Button>
                 <Add type={"Estudiante"} variable={"Añadir nuevo Estudiante"}/>
                 <Add type={"Profesor"} variable={"Añadir nuevo Profesor"}/>
-               
+               <Addothers></Addothers>
                 </Stack>
 
             </DrawerBody>

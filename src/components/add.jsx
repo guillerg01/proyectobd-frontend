@@ -20,31 +20,60 @@ import { enqueueSnackbar } from "notistack";
 export const Add = ({ variable,type }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const postData = async (nombre, apellido,user,password,type,nom_prof,ape_prof) => {
-    let rolecompuesto = "Profesor"
-    if(type === "Estudiante") { rolecompuesto=`Estudiante_${nom_prof}_${ape_prof}`;}
+  // const postData = async (nombre, apellido,user,password,type,nom_prof,ape_prof) => {
+  //   let rolecompuesto = "Profesor"
+  //   if(type === "Estudiante") { rolecompuesto=`Estudiante_${nom_prof}_${ape_prof}`;}
    
-    const url = "http://localhost:3000/people";
-    const response = await fetch(url, {
-      method: "POST",
-      body: JSON.stringify({
-        name: nombre,
-        surname: apellido,
-        usuario: user,
-        password: password,
-        role: rolecompuesto,
-        value: 1
-      }),
-      headers: {
-        "content-type": "application/json",
-      },
-    })
+  //   const url = "http://localhost:3000/people";
+  //   const response = await fetch(url, {
+  //     method: "POST",
+  //     body: JSON.stringify({
+  //       name: nombre,
+  //       surname: apellido,
+  //       usuario: user,
+  //       password: password,
+  //       role: rolecompuesto,
+  //       value: 1
+  //     }),
+  //     headers: {
+  //       "content-type": "application/json",
+  //     },
+  //   })
     
-    return response.json();
-  };
+  //   return response.json();
+  // };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   const handleclick = () => {
-    postData(nom.value, ape.value , user.value, password.value, type, nom_prof.value,ape_prof.value);
+    const res = axios.post('https://proyectobd.onrender.com/api/auth/login', {
+      name: nom.value,
+      surname: ape.value,
+      email: email.value,
+      password: password.value,
+      ci: ci.value,
+      centro_id : centro.value,
+     rol_id: type,
+    },{
+    headers: {"Content-Type": "application/json"}
+    })
+
+
+
+
+   // postData(nom.value, ape.value , user.value, password.value, type, nom_prof.value,ape_prof.value);
     enqueueSnackbar("Añadido exitosamente!"),{
       persist: false,
       variant:"success"
@@ -75,13 +104,13 @@ export const Add = ({ variable,type }) => {
             </FormControl>
 
             <FormControl pb={6} isRequired >
-              <FormLabel>usuario de Login</FormLabel>
-              <Input id="user" placeholder="usuario" name="userinput" />
+              <FormLabel>Centro</FormLabel>
+              <Input id="centro" placeholder="usuario" name="userinput" />
             </FormControl>
 
              <FormControl pb={6} isRequired>
               <FormLabel>email</FormLabel>
-              <Input id="asig" type="email" placeholder="email" name="email" />
+              <Input id="email" type="email" placeholder="email" name="email" />
             </FormControl>
 
             <FormControl pb={6} isRequired >
@@ -106,12 +135,12 @@ export const Add = ({ variable,type }) => {
               <Input id="ape_prof" placeholder="Apellido" name="apellido" />
             </FormControl>}
 
-            {type==="Profesor" && <FormControl pb={6} isRequired>
+            {type==="Estudiante" && <FormControl pb={6} isRequired>
               <FormLabel>Asignatura</FormLabel>
               <Input id="asig" placeholder="Asignatura" name="Asignatura" />
             </FormControl>}
 
-            {type==="Profesor" && <FormControl pb={6} isRequired>
+            {type==="Estudiante" && <FormControl pb={6} isRequired>
               <FormLabel>Año</FormLabel>
               <Input id="ano" type="number" placeholder="Año" name="Año" />
             </FormControl>}
