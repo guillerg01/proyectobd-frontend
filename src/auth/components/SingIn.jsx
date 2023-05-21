@@ -3,27 +3,24 @@ import AuthContext from "./AuthToken";
 import { useContext } from "react";
 import {
   Stack,
-  Box,
+
   InputGroup,
   Input,
-  InputLeftElement,
+
   InputRightElement,
-  Flex,
-  Tabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel,
+  
   Button,
   Checkbox,
   FormControl,
   FormLabel,
   FormHelperText,
+  getToken,
 } from "@chakra-ui/react";
-import { PhoneIcon, CheckIcon } from "@chakra-ui/icons";
 import { Spacer } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { enqueueSnackbar } from "notistack";
+import instance from "../../components/axiosapi";
+import axios from "axios";
 
 
 
@@ -35,39 +32,64 @@ function SingIn(){
   const navigate = useNavigate();
   const [password, SetPassword] = useState("");
   const [email, SetEmail] = useState("");
+  
+  
   const handleClickdone = ()=>{
-    const newUser = {
-      
+    
+    const res = axios.post('https://proyectobd.onrender.com/api/auth/login', {
       email: email,
-      password: password
-    };
+      password: password,
+    },{
+    headers: {"Content-Type": "application/json"}
+    })
+      .then((response) => {
+         
+              //auth.setToken(response.data.token)
+              console.log(response.data.token);
+              const res2 = axios.get('https://proyectobd.onrender.com/api/user/profile', {
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization" : `${response.data.token}`
+            }
+              }).then((response) => {
+                console.log(response);
 
-    const postData = async ({password,email}) => {
+              }).catch((error) => {console.error(error)});
+        
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+
+
+
+//     const postData = async ({password,email}) => {
     
    
-      const url = "https://proyectobd.onrender.com/api/auth/login";
-      const response = await fetch(url, {
-        method: "POST",
-        body: JSON.stringify({
+//       const url = "https://proyectobd.onrender.com/api/auth/login";
+//       const response = await fetch(url, {
+//         method: "POST",
+//         body: JSON.stringify({
           
          
-          password: password,
-           email: email,
+//           password: password,
+//            email: email,
          
-        }),
-        headers: {
-          "content-type": "application/json",
-        },
-      })
-      const data = await response.json();
-      // auth.setTokenauth.setToken(data.token)
-console.log(data);
-      return response.json();
-    };
+//         }),
+//         headers: {
+//           "content-type": "application/json",
+//         },
+//       })
+//       const data = await response.json();
+//        auth.setTokenauth.setToken(data.token)
+// console.log(data);
+//       return response.json();
+//     };
   
 
 
-console.log(newUser)
+
 
 
 //  if(email.value==="admin"&&pass.value==="admin"){
@@ -85,7 +107,7 @@ console.log(newUser)
 //   persist: false,
 //   variant: "error"
 // } )
-postData(newUser)
+
 SetEmail("");
     SetPassword("");
    

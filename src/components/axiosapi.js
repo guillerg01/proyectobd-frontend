@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const instance = axios.create({
-  baseURL: 'https://api.example.com',
+  baseURL: 'https://proyectobd.onrender.com/api',
   headers: {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Headers': '*',
