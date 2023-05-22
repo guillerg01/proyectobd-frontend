@@ -34,7 +34,7 @@ function SingIn(){
   const [password, SetPassword] = useState("");
   const [email, SetEmail] = useState("");
   const [cookies, setCookie] = useCookies(['token']);
-  
+  // const cookieprofesor = new Cookies();
   const handleClickdone = ()=>{
     
     const res = axios.post('https://proyectobd.onrender.com/api/auth/login', {
@@ -46,7 +46,10 @@ function SingIn(){
       .then((response) => {
          
         setCookie('token', `${response.data.token}`, { path: '/' });
-              console.log(response.data.token);
+        // cookieprofesor.set('profesor', response.data.result, { path: '/' });
+     
+
+              console.log(response.data.token );
               const res2 = axios.get('https://proyectobd.onrender.com/api/user/profile', {
               headers: {
                 "Content-Type": "application/json",

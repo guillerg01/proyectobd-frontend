@@ -25,16 +25,17 @@ export const Getpeople = ({profesor,esajustes}) => {
       "Content-Type": "application/json",
       "Authorization" : `Bearer ${cookies.token}`
   }
-    }).then((res) =>
-
+    }).then((res) =>{
+      const profesor = res.data.result[0]
     console.log(res)
+  console.log(profesor)}
     )}, {
       keepPreviousData: true,
       
     }
   );
   
- console.log(cookies.token)
+
 
 
   // const [state, setState] = useState("")
@@ -91,7 +92,7 @@ export const Getpeople = ({profesor,esajustes}) => {
     <Tbody> 
       
       {isSuccess &&array?.map((data, i) => {
-          return (i<30&&data?.role===`Estudiante_${profesor.nombre}_${profesor.apellido}`&&<ContenTable nombre={data?.name} valor={data?.value} apellidos={data?.surname} id={data?.id} esajustes={esajustes} key={data?.id} ></ContenTable>)})}  
+          return (i<30&&data?.role===`Estudiante_${profesor.name}_${profesor.surname}`&&<ContenTable nombre={data?.name} valor={data?.value} apellidos={data?.surname} id={data?.id} esajustes={esajustes} key={data?.id} ></ContenTable>)})}  
        
           </Tbody>
     
