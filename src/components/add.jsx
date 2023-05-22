@@ -20,45 +20,9 @@ import { enqueueSnackbar } from "notistack";
 export const Add = ({ variable,type }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  // const postData = async (nombre, apellido,user,password,type,nom_prof,ape_prof) => {
-  //   let rolecompuesto = "Profesor"
-  //   if(type === "Estudiante") { rolecompuesto=`Estudiante_${nom_prof}_${ape_prof}`;}
-   
-  //   const url = "http://localhost:3000/people";
-  //   const response = await fetch(url, {
-  //     method: "POST",
-  //     body: JSON.stringify({
-  //       name: nombre,
-  //       surname: apellido,
-  //       usuario: user,
-  //       password: password,
-  //       role: rolecompuesto,
-  //       value: 1
-  //     }),
-  //     headers: {
-  //       "content-type": "application/json",
-  //     },
-  //   })
-    
-  //   return response.json();
-  // };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  const handleclick = () => {
-    const res = axios.post('https://proyectobd.onrender.com/api/auth/login', {
+  const handleprofesor=()=>{
+    const res = axios.post('https://proyectobd.onrender.com/api/create-professor', {
       name: nom.value,
       surname: ape.value,
       email: email.value,
@@ -66,20 +30,38 @@ export const Add = ({ variable,type }) => {
       ci: ci.value,
       centro_id : centro.value,
      rol_id: type,
-    },{
-    headers: {"Content-Type": "application/json"}
-    })
+
+  },{
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization" : `Bearer ${cookies.token}`
+  }
+  }).then((response)=>{console.log(response)})
+  }
+  const handleestudiante=()=>{
+    const res = axios.post('https://proyectobd.onrender.com/api/create-student', {
+      name: nom.value,
+      surname: ape.value,
+      email: email.value,
+      password: password.value,
+      ci: ci.value,
+      centro_id : centro.value,
+     rol_id: type,
+
+  },{
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization" : `Bearer ${cookies.token}`
+  }
+  }).then((response)=>{console.log(response)})
+  }
+  
 
 
 
 
-   // postData(nom.value, ape.value , user.value, password.value, type, nom_prof.value,ape_prof.value);
-    enqueueSnackbar("Añadido exitosamente!"),{
-      persist: false,
-      variant:"success"
-    } 
-    
-  };
+
+  
 
   return (
     <>
@@ -153,9 +135,12 @@ export const Add = ({ variable,type }) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button onClick={handleclick} colorScheme="blue" mr={3}>
-              Guardar
-            </Button>
+            {type==="Profesor"&&<Button onClick={handleprofesor} colorScheme="blue" mr={3}>
+              Guardar profesor
+            </Button>}
+            {type==="Estudiantes"&& <Button onClick={handleestudiante} colorScheme="blue" mr={3}>
+              Guardar estudiantes
+            </Button>}
             <Button onClick={onClose}>Cancelar</Button>
           </ModalFooter>
         </ModalContent>
