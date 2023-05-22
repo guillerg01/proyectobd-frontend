@@ -14,8 +14,8 @@ import {
     FormLabel,
     Input,
     ModalFooter,
-    Flex,
-    Center,
+    Divider,
+    Select
   } from "@chakra-ui/react";
   import {  useDisclosure } from "@chakra-ui/react";
 
@@ -23,10 +23,73 @@ import { enqueueSnackbar } from "notistack";
 
 
 export const Addothers = ()=>{
+  const [cookies] = useCookies(['token']);
     const { isOpen, onOpen, onClose } = useDisclosure();
+
    const[centro,SetCentro]=useState("")
-   const [cookies] = useCookies(['token']);
- 
+   const[facultad,SetFacultad]=useState("")
+   const[semestre,SetSemestre]=useState("")
+   const[departamentos,SetDepartamentos]=useState("")
+   const[curso,SetCurso]=useState("")
+   const[carrera,SetCarrera]=useState("")
+
+
+
+
+
+   const[centros,SetCentros]=useState([])
+   const[facultades,SetFacultades]=useState([])
+
+
+
+   const[valorselectcentros,SetValorselectcentros]=useState("")
+   const[valorselectfacultades,SetValorselectfacultades]=useState("")
+
+
+
+
+
+   const handlecentroeliminar=()=>{Eliminar("center",centro)}
+
+
+
+   const handlecentrolist=()=>{listar("center")}
+   const handlefacultadlist=()=>{listar("faculty")}
+   const handlesemestrelist=()=>{listar("semester")}
+   const handledepartamentoslist=()=>{listar("deparment")}
+   const handlecursolist=()=>{listar("course")}
+   const handlecarreralist=()=>{listar("carreer")}
+
+
+   function listar(urlfinal){
+
+    const res2 = axios.get(`https://proyectobd.onrender.com/api/${urlfinal}/list`, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization" : `Bearer ${cookies.token}`
+    }
+      }).then((response) => {
+        
+        if(urlfinal ==="center"){SetCentros(response.data.result)}
+       else if(urlfinal ==="carreer"){SetFacultades(response.data.result)}
+        console.log(response.data.result)
+      console.log(facultades)})
+
+  }
+
+  function Eliminar(urlfinal,id){
+const res2 = axios.get(`https://proyectobd.onrender.com/api/${urlfinal}/delete/:${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization" : `Bearer ${cookies.token}`
+    }
+      }).then((response) => {console.log(response.data.result)})
+
+  }
+
+
+
+
 
 
     const handlecentro=()=>{
@@ -40,37 +103,32 @@ export const Addothers = ()=>{
     }).then((response)=>{console.log(response)})
   }
 
-function listar(urlfinal){
-
-    const res2 = axios.get(`https://proyectobd.onrender.com/api/${urlfinal}/list`, {
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization" : `Bearer ${cookies.token}`
-    }
-      }).then((response) => {console.log(response.data.result)})
-
+  const handlefacultad=()=>{
+    const res = axios.post('https://proyectobd.onrender.com/api/faculty', {
+    nombre: facultad,
+    centro_id: centros[valorselectcentros].id
+  },{
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization" : `Bearer ${cookies.token}`
   }
+  }).then((response)=>{console.log(response)})
+}
 
-  function Eliminar(urlfinal,id){
+const handlecarrera=()=>{
+  const res = axios.post('https://proyectobd.onrender.com/api/carreer', {
+  nombre: facultad,
+  facultad_id: facultades[valorselectfacultades].id
+},{
+headers: {
+  "Content-Type": "application/json",
+  "Authorization" : `Bearer ${cookies.token}`
+}
+}).then((response)=>{console.log(response)})
+}
 
-    const res2 = axios.get(`https://proyectobd.onrender.com/api/${urlfinal}/delete/:${id}`, {
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization" : `Bearer ${cookies.token}`
-    }
-      }).then((response) => {console.log(response.data.result)})
 
-  }
-
-  const handlecentrolist=()=>{
-    listar("center")
-    }
-  const handlecentroeliminar=()=>{
-
-Eliminar("center",centro)
-
-  }
-
+ 
 
 
 
@@ -87,9 +145,11 @@ Eliminar("center",centro)
           <ModalHeader>Añadir otros</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={7}>
+
+
             <FormControl>
               <FormLabel >Añadir Centro</FormLabel>
-              <Input value={centro} onChange={(e)=>{SetCentro(e.target.value)}} width='100%' margin='7px' id="nom" placeholder="Nombre" name="nombre" />
+              <Input value={centro} onChange={(e)=>{SetCentro(e.target.value)}} width='100%' marginBottom='15px' id="nom" placeholder="Nombre" name="nombre" />
               <Button onClick={handlecentro} marginBottom='7px' colorScheme="blue" mr={3}>
               Guardar
             </Button>
@@ -99,72 +159,109 @@ Eliminar("center",centro)
             <Button onClick={handlecentroeliminar} marginBottom='7px' colorScheme="blue" mr={3}>
               Eliminar
             </Button>
+            <Divider m={3}/>
             </FormControl>
+
+
 
             <FormControl pb={6}>
               <FormLabel >Añadir Facultad</FormLabel>
-              <Input width='50%' margin='7px' id="nom" placeholder="Nombre" name="nombre" />
-              <Button marginBottom='7px' colorScheme="blue" mr={3}>
+              <Input value={facultad} onChange={(e)=>{SetFacultad(e.target.value)}} marginBottom='15px' id="nom" placeholder="Nombre" name="nombre" />
+              <Select onClick={handlecentrolist} value={valorselectcentros} onChange={(e)=>{SetValorselectcentros(e.target.value) ;}} marginBottom="7px" placeholder='Selecionar un centro primero'>
+                {centros.map((centro,i)=>{
+                  return(
+                  <option value={i} key={i}>{centro.nombre}</option>
+                   
+                   )
+                })}
+  
+</Select>
+              <Button onClick={handlefacultad} marginBottom='7px' colorScheme="blue" mr={3}>
               Guardar
             </Button>
-            <Button  marginBottom='7px' colorScheme="blue" mr={3}>
+            <Button onClick={handlefacultadlist} marginBottom='7px' colorScheme="blue" mr={3}>
               Listar
             </Button>
-            </FormControl>
-
-            <FormControl pb={6}>
-              <FormLabel >Añadir Semestre</FormLabel>
-              <Input width='50%' margin='7px' id="nom" placeholder="Nombre" name="nombre" />
-              <Button marginBottom='7px' colorScheme="blue" mr={3}>
-              Guardar
-            </Button>
             <Button  marginBottom='7px' colorScheme="blue" mr={3}>
-              Listar
+              Eliminar
             </Button>
+            <Divider m={3}/>
             </FormControl>
 
             <FormControl pb={6}>
               <FormLabel >Añadir Carrera</FormLabel>
-              <Input width='50%' margin='7px' id="nom" placeholder="Nombre" name="nombre" />
+              <Input  value={carrera} onChange={(e)=>{SetCarrera(e.target.value)}} marginBottom='15px' id="nom" placeholder="Nombre" name="nombre" />
+              <Select onClick={handlefacultadlist} value={valorselectfacultades} onChange={(e)=>{SetValorselectfacultades(e.target.value) ;}} marginBottom="7px" placeholder='Seleccionar una Facultad primero'>
+                {facultades.map((f,i)=>{
+                  return(
+                  <option value={i} key={i}>{f.nombre}</option>
+                   
+                   )
+                })}
+  
+</Select>
               <Button marginBottom='7px' colorScheme="blue" mr={3}>
               Guardar
             </Button>
-            <Button  marginBottom='7px' colorScheme="blue" mr={3}>
+            <Button onClick={handlecarreralist} marginBottom='7px' colorScheme="blue" mr={3}>
               Listar
             </Button>
+            <Button  marginBottom='7px' colorScheme="blue" mr={3}>
+              Eliminar
+            </Button>
+            <Divider m={3}/>
             </FormControl>
+
+
             <FormControl pb={6}>
-              <FormLabel >Añadir Roles</FormLabel>
-              <Input width='50%' margin='7px' id="nom" placeholder="Nombre" name="nombre" />
+              <FormLabel >Añadir Semestre</FormLabel>
+              <Input value={semestre} onChange={(e)=>{SetSemestre(e.target.value)}}  marginBottom='15px' id="nom" placeholder="Nombre" name="nombre" />
               <Button marginBottom='7px' colorScheme="blue" mr={3}>
               Guardar
             </Button>
-            <Button  marginBottom='7px' colorScheme="blue" mr={3}>
+            <Button onClick={handlesemestrelist} marginBottom='7px' colorScheme="blue" mr={3}>
               Listar
             </Button>
+            <Button marginBottom='7px' colorScheme="blue" mr={3}>
+              Eliminar
+            </Button>
+            <Divider m={3}/>
             </FormControl>
+
+            
+
+
+           
 
             <FormControl pb={6}>
               <FormLabel >Añadir Departamentos</FormLabel>
-              <Input width='50%' margin='7px' id="nom" placeholder="Nombre" name="nombre" />
+              <Input  value={departamentos} onChange={(e)=>{SetDepartamentos(e.target.value)}} marginBottom='15px' id="nom" placeholder="Nombre" name="nombre" />
               <Button marginBottom='7px' colorScheme="blue" mr={3}>
               Guardar
             </Button>
-            <Button  marginBottom='7px' colorScheme="blue" mr={3}>
+            <Button onClick={handledepartamentoslist} marginBottom='7px' colorScheme="blue" mr={3}>
               Listar
             </Button>
+            <Button  marginBottom='7px' colorScheme="blue" mr={3}>
+              Eliminar
+            </Button>
+            <Divider m={3}/>
             </FormControl>
 
 
             <FormControl pb={6}>
               <FormLabel >Añadir Curso</FormLabel>
-              <Input width='50%' margin='7px' id="nom" placeholder="Nombre" name="nombre" />
+              <Input value={curso} onChange={(e)=>{SetCurso(e.target.value)}}  marginBottom='15px' id="nom" placeholder="Nombre" name="nombre" />
               <Button marginBottom='7px' colorScheme="blue" mr={3}>
               Guardar
             </Button>
-            <Button marginBottom='7px' colorScheme="blue" mr={3}>
+            <Button onClick={handlecursolist} marginBottom='7px' colorScheme="blue" mr={3}>
               Listar
             </Button>
+            <Button  marginBottom='7px' colorScheme="blue" mr={3}>
+              Eliminar
+            </Button>
+            <Divider m={3}/>
             </FormControl>
 
 

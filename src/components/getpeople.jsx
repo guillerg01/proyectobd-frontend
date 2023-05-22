@@ -27,8 +27,8 @@ export const Getpeople = ({profesor,esajustes}) => {
   }
     }).then((res) =>{
       const profesor = res.data.result[0]
-    console.log(res)
-  console.log(profesor)}
+    
+  }
     )}, {
       keepPreviousData: true,
       
