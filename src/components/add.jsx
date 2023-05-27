@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { useCookies } from 'react-cookie';
 import {
   Modal,
   Button,
@@ -11,14 +12,34 @@ import {
   FormLabel,
   Input,
   ModalFooter,
+  Select 
 } from "@chakra-ui/react";
+import axios from "axios";
 import {  useDisclosure } from "@chakra-ui/react";
 
 import { enqueueSnackbar } from "notistack";
 
 
 export const Add = ({ variable,type }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();  
+
+
+
+
+  const [cookies] = useCookies(['token']);
+
+
+
+  const[centros,SetCentros]=useState([])
+  const[departamentos,SetDepartamentos]=useState([])
+
+
+  const[valorselectcentros,SetValorselectcentros]=useState();
+  const[valorselectdepartamentos,SetValorselectdepartamentos]=useState();
+
+
+  const handlecentrolist=()=>{listar("center")}
+  const handledepartamentoslist=()=>{listar("deparment")}
 
 
   const handleprofesor=()=>{
@@ -28,8 +49,11 @@ export const Add = ({ variable,type }) => {
       email: email.value,
       password: password.value,
       ci: ci.value,
-      centro_id : centro.value,
+      centro_id : centros[valorselectcentros].id,
+      typo_profesor_id : typography.value,
      rol_id: type,
+     departamento_id : departamentos[valorselectdepartamentos].id
+
 
   },{
   headers: {
@@ -42,11 +66,13 @@ export const Add = ({ variable,type }) => {
     const res = axios.post('https://proyectobd.onrender.com/api/create-student', {
       name: nom.value,
       surname: ape.value,
-      email: email.value,
       password: password.value,
+      email: email.value,
       ci: ci.value,
       centro_id : centro.value,
      rol_id: type,
+     esRepitente: esRepitente.value,
+     matricula_id: matricula.value
 
   },{
   headers: {
@@ -56,9 +82,24 @@ export const Add = ({ variable,type }) => {
   }).then((response)=>{console.log(response)})
   }
   
+  function listar(urlfinal){
 
+    const res2 = axios.get(`https://proyectobd.onrender.com/api/${urlfinal}/list`, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization" : `Bearer ${cookies.token}`
+    }
+      }).then((response) => {
+        
+        if(urlfinal ==="center"){SetCentros(response.data.result)}  ;  
+        if(urlfinal ==="deparment"){SetDepartamentos(response.data.result)}  ; 
+        console.log(response.data.result);    
+        
+    
+       
+    })
 
-
+  }
 
 
   
@@ -85,10 +126,10 @@ export const Add = ({ variable,type }) => {
               <Input id="ape" placeholder="Apellido" name="apellido" />
             </FormControl>
 
-            <FormControl pb={6} isRequired >
+            {/* <FormControl pb={6} isRequired >
               <FormLabel>Centro</FormLabel>
               <Input id="centro" placeholder="usuario" name="userinput" />
-            </FormControl>
+            </FormControl> */}
 
              <FormControl pb={6} isRequired>
               <FormLabel>email</FormLabel>
@@ -107,30 +148,49 @@ export const Add = ({ variable,type }) => {
               
             </FormControl>
            
-           {type==="Estudiante" && <FormControl pb={6} isRequired>
-              <FormLabel>Nombre de Profesor</FormLabel>
-              <Input id="nom_prof" placeholder="Nombre" name="nombre" />
-            </FormControl>}        
+             
             
-            {type==="Estudiante" && <FormControl pb={6} isRequired>
-              <FormLabel>Apellido Profesor</FormLabel>
-              <Input id="ape_prof" placeholder="Apellido" name="apellido" />
-            </FormControl>}
+            
 
-            {type==="Estudiante" && <FormControl pb={6} isRequired>
+            {/* {type==="Estudiante" && <FormControl pb={6} isRequired>
               <FormLabel>Asignatura</FormLabel>
               <Input id="asig" placeholder="Asignatura" name="Asignatura" />
+            </FormControl>} */}
+
+
+           
+
+            <FormControl pb={6} isRequired>
+              <FormLabel>CI</FormLabel>
+              <Input id="ci" type="number" placeholder="CI" name="CI" />
+            </FormControl>
+
+
+            {type==="Profesor" && <FormControl pb={6} isRequired>
+              <FormLabel>Tipo de profesor</FormLabel>
+              <Input id="typo" placeholder="CP o CF" name="Asignatura" />
             </FormControl>}
 
-            {type==="Estudiante" && <FormControl pb={6} isRequired>
-              <FormLabel>Año</FormLabel>
-              <Input id="ano" type="number" placeholder="Año" name="Año" />
-            </FormControl>}
 
-            {type==="Profesor" && <FormControl isRequired>
-              <FormLabel>Facultad</FormLabel>
-              <Input id="facultad" type="number" placeholder="Facultad" name="Facultad" />
-            </FormControl>}
+            <Select pb={6} marginTop={5} onClick={handlecentrolist} value={valorselectcentros} onChange={(e)=>{SetValorselectcentros(e.target.value) ;}} marginBottom="7px" placeholder='Selecionar un centro'>
+                {centros.map((centro,i)=>{
+                  return(
+                  <option value={i} key={i}>{centro.nombre}</option>
+                   
+                   )
+                })}
+  
+              </Select>
+
+              {type==="Profesor" && <Select pb={6} marginTop={5} onClick={handledepartamentoslist} value={valorselectdepartamentos} onChange={(e)=>{SetValorselectdepartamentos(e.target.value) ;}} marginBottom="7px" placeholder='Selecionar un departamento '>
+                {departamentos.map((departamento,i)=>{
+                  return(
+                  <option value={i} key={i}>{departamento.nombre}</option>
+                   
+                   )
+                })}
+  
+              </Select>}
 
           </ModalBody>
 
