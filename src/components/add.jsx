@@ -35,13 +35,14 @@ if(type==="Profesor"){ rol_id = 13}
   const[centros,SetCentros]=useState([])
   const[departamentos,SetDepartamentos]=useState([])
 const [esRepitente,SetEsRepitente] = useState(false)
-
+const[matriculas,SetMatriculas]=useState([])
   const[valorselectcentros,SetValorselectcentros]=useState();
   const[valorselectdepartamentos,SetValorselectdepartamentos]=useState();
   const[typo_profesor_id,SetTypo_profesor_id]=useState();
-
+  const [valorselectmatricula,SetValorselectmatricula]=useState("")
   const handlecentrolist=()=>{listar("center")}
   const handledepartamentoslist=()=>{listar("deparment")}
+  const handlematriculalist=()=>{listar("enrollment")}
 
 
   const handleprofesor=()=>{
@@ -71,10 +72,10 @@ const [esRepitente,SetEsRepitente] = useState(false)
       password: password.value,
       email: email.value,
       ci: ci.value,
-      centro_id : centro.value,
+      centro_id :centros[valorselectcentros].id,
      rol_id: rol_id,
      esRepitente: esRepitente.value,
-     matricula_id: matricula.value
+     matricula_id: matriculas[valorselectmatricula].id
 
   },{
   headers: {
@@ -94,7 +95,8 @@ const [esRepitente,SetEsRepitente] = useState(false)
       }).then((response) => {
         
         if(urlfinal ==="center"){SetCentros(response.data.result)}  ;  
-        if(urlfinal ==="deparment"){SetDepartamentos(response.data.result)}  ; 
+        if(urlfinal ==="deparment"){SetDepartamentos(response.data.result)}  ;
+        if(urlfinal ==="subject"){SetMatriculas(response.data.result)}  ; 
         console.log(response.data.result);    
         
     
@@ -216,13 +218,23 @@ const [esRepitente,SetEsRepitente] = useState(false)
   
               </Select>}
 
+              {type==="Estudiante" && <Select onClick={handlematriculalist} value={valorselectmatricula} onChange={(e)=>{SetValorselectmatricula(e.target.value) ;}} marginBottom="7px" placeholder='Selecionar una matricula'>
+                {matriculas.map((m,i)=>{
+                  return(
+                <option value={i} key={i}>{m.id }</option>
+                
+                   )
+                })}
+  
+              </Select>}
+
           </ModalBody>
 
           <ModalFooter>
             {type==="Profesor"&&<Button onClick={handleprofesor} colorScheme="blue" mr={3}>
               Guardar profesor
             </Button>}
-            {type==="Estudiantes"&& <Button onClick={handleestudiante} colorScheme="blue" mr={3}>
+            {type==="Estudiante"&& <Button onClick={handleestudiante} colorScheme="blue" mr={3}>
               Guardar estudiantes
             </Button>}
             <Button onClick={onClose}>Cancelar</Button>

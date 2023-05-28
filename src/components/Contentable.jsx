@@ -1,20 +1,60 @@
 import React, { useEffect, useState } from "react"
+import axios from "axios";
 import { Tr,Modal,Collapse,ModalOverlay,ModalContent,ModalHeader,ModalCloseButton,ModalBody,FormControl,FormLabel,Input,ModalFooter,Button ,Td, RadioGroup,Stack,Radio,SimpleGrid,useDisclosure} from '@chakra-ui/react'
 import { postRadio } from "../services/services"
+import { useCookies } from 'react-cookie';
+
 
 export const ContenTable = ({nombre,apellidos,valor ,id,esajustes})=>{
     const[value, setValue] = useState(`${valor}`)
 
     const { isOpen, onOpen, onClose } = useDisclosure()
-
+    const [cookies] = useCookies(['token']);
     const initialRef = React.useRef(null)
     const finalRef = React.useRef(null)
      
+
+    // const res2 = axios.get(`https://proyectobd.onrender.com/api/assistence/get/${id}`, {
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     "Authorization" : `Bearer ${cookies.token}`
+    // }
+    //   }).then((response) => {
+    //     // console.log(response) 
+    //   })
+
+      const res2 = axios.get(`https://proyectobd.onrender.com/api/user/students`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization" : `Bearer ${cookies.token}`
+      }
+        }).then((response) => {
+          console.log("estudiantes")
+          console.log(response) 
+        })
+  
+
+
+
+
+
+
+
+
     useEffect(  () => {
 
-      //postRadio(id, value);
-      console.log("cambio: " + value)
-
+      
+      //   const res = axios.post(`https://proyectobd.onrender.com/api/assistence/update/${id}/:subjectid/:date`, {
+      //   nombre: centro
+      // },{
+      // headers: {
+      //   "Content-Type": "application/json",
+      //   "Authorization" : `Bearer ${cookies.token}`
+      // }
+      // }).then((response)=>{console.log(response)})
+    
+      // console.log(value)
+      // console.log("cambio")
 
 
     },[value])

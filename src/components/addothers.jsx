@@ -99,6 +99,7 @@ const handlemateriaeliminar=()=>{Eliminar("subject",carrera)}
        if(urlfinal ==="deparment"){SetDepartamentos(response.data.result)}
        if(urlfinal ==="semester"){SetSemestres(response.data.result)}
        if(urlfinal ==="user"){SetUsers(response.data.result)}
+       if(urlfinal ==="enrollment"){SetMaterias(response.data.result)}
         console.log(response.data.result);    
         console.log(urlfinal); 
         
@@ -202,7 +203,7 @@ headers: {
 
 const handlematricula=()=>{
   const res = axios.post('https://proyectobd.onrender.com/api/enrollment', {
-    nombre: matricula,
+    materia_id : materias[valorselectmaterias].id
     
     
 },{
@@ -447,7 +448,16 @@ headers: {
 
             <FormControl>
               <FormLabel >Añadir Matricula</FormLabel>
-              <Input value={matricula} onChange={(e)=>{SetMatricula(e.target.value)}} width='100%' marginBottom='15px' id="nom" placeholder="Nombre" name="nombre" />
+             
+              <Select onClick={handlematerialist} value={valorselectmaterias} onChange={(e)=>{SetValorselectmaterias(e.target.value) ;}} marginBottom="7px" placeholder='Selecionar una materia'>
+                {materias.map((m,i)=>{
+                  return(
+                <option value={i} key={i}>{m.nombre }</option>
+                
+                   )
+                })}
+  
+              </Select>
               <Button onClick={handlematricula} marginBottom='7px' colorScheme="blue" mr={3}>
               Guardar
             </Button>

@@ -55,8 +55,8 @@ function SingIn(){
                 "Content-Type": "application/json",
                 "Authorization" : `Bearer ${response.data.token}`
             }
-              }).then((response) => {
-               if( response.data.result.role==="admin" ){
+              }).then((response) => { console.log(response);
+               if( response.data.result.rol_id===11 || response.data.result.rol_id===13){
 
                 enqueueSnackbar("Hecho"),{
                       persist: false,
@@ -66,21 +66,35 @@ function SingIn(){
                       {
                         replace: true
                       });
-               }else{
-                enqueueSnackbar("Error de Usuario o Contraseña"),{
+               }
+               if(response.data.result.rol_id===12){
+
+                enqueueSnackbar("Hecho"),{
                   persist: false,
-                  variant:"error"
+                  variant:"success"
                 }; 
-                  navigate("/estudiantes",
+                navigate("/estudiantes",
                   {
                     replace: true
                   });
-
-
-
                }
+               else{
+               
+               
+               
+                }
 
-              }).catch((error) => {console.error(error)});
+               
+
+              }).catch((error) => { enqueueSnackbar("Error de Usuario o Contraseña"),{
+                persist: false,
+                variant:"error"
+              }; 
+                
+                {
+                  replace: true
+                };
+});
         
       })
       .catch((error) => {

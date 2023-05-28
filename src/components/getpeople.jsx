@@ -11,7 +11,7 @@ import { Spinner } from "react-bootstrap";
 
 export const Getpeople = ({profesor,esajustes}) => {
   const [cookies] = useCookies(['token']);
- 
+ const[users,SetUsers]=useState([])
 
   const {
     data: array,
@@ -25,9 +25,9 @@ export const Getpeople = ({profesor,esajustes}) => {
       "Content-Type": "application/json",
       "Authorization" : `Bearer ${cookies.token}`
   }
-    }).then((res) =>{console.log(res);
-    //   const profesor = res.data.result[0]
-    // console.log(profesor)
+    }).then((res) =>{ 
+      SetUsers(res.data.result)
+ 
   }
     )}, {
       keepPreviousData: true,
@@ -61,6 +61,8 @@ export const Getpeople = ({profesor,esajustes}) => {
 //}, []);
 
  // get();// no lo use
+
+ 
   return (
     <SimpleGrid columns={1} p="3%" spacingX="40px" spacingY="20px">
       {isLoading && (
@@ -91,8 +93,8 @@ export const Getpeople = ({profesor,esajustes}) => {
     </Thead>
     <Tbody> 
       
-      {isSuccess &&array?.map((data, i) => {
-          return (i<30&&data?.role===`Estudiante_${profesor.name}_${profesor.surname}`&&<ContenTable nombre={data?.name} valor={data?.value} apellidos={data?.surname} id={data?.id} esajustes={esajustes} key={data?.id} ></ContenTable>)})}  
+      {isSuccess &&users.map((data, i) => {
+          return (i<30&&data?.rol_id===12&&<ContenTable nombre={data?.name} valor={data?.value} apellidos={data?.surname} id={data?.id} esajustes={esajustes} key={data?.id} ></ContenTable>)})}  
        
           </Tbody>
     
