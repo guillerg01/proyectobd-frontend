@@ -29,30 +29,43 @@ export const Addothers = ()=>{
    const[centro,SetCentro]=useState("")
    const[facultad,SetFacultad]=useState("")
    const[semestre,SetSemestre]=useState("")
-   const[departamentos,SetDepartamentos]=useState("")
+   const[departamento,SetDepartamento]=useState("")
    const[cursofin,SetCursofin]=useState(0)
    const[cursoinicio,SetCursoinicio]=useState(0)
    const[carrera,SetCarrera]=useState("")
+   const[matricula,SetMatricula]=useState()
+  const[materia,SetMateria]=useState("")
 
 
-
-
-
+  const[semestres,SetSemestres]=useState([])
+   const[materias,SetMaterias]=useState([])
    const[centros,SetCentros]=useState([])
    const[facultades,SetFacultades]=useState([])   
    const[carreras,SetCarreras]=useState([])  
    const[cursos,SetCursos]=useState([])
+   const[departamentos,SetDepartamentos]=useState([])
+   const[users,SetUsers]=useState([])
+
+
 
    const[valorselectcentros,SetValorselectcentros]=useState("")
    const[valorselectfacultades,SetValorselectfacultades]=useState("")
    const[valorselectcarreras,SetValorselectcarreras]=useState("")
    const[valorselectcursos,SetValorselectcursos]=useState("")
-
+   const[valorselectmaterias,SetValorselectmaterias]=useState("")
+const [valorselectdepartamento,SetValorselectdepartamento]=useState("")
+const [valorselectsemestre,SetValorselectsemestre]=useState("")
+const [valorselectuser,SetValorselectuser]=useState("")
 
 
    const handlecentroeliminar=()=>{Eliminar("center",centro)}
    const handlefacultadeliminar=()=>{Eliminar("faculty",facultad)}
    const handlecarreraeliminar=()=>{Eliminar("carreer",carrera)}
+   const handlesemestreeliminar=()=>{Eliminar("semester",carrera)}
+   const handledepartamentoseliminar=()=>{Eliminar("deparment",carrera)}
+   const handlecursoseliminar=()=>{Eliminar("course",carrera)}
+   const handlematriculaeliminar=()=>{Eliminar("enrollment",carrera)}
+const handlemateriaeliminar=()=>{Eliminar("subject",carrera)}
 
 
 
@@ -63,6 +76,10 @@ export const Addothers = ()=>{
    const handledepartamentoslist=()=>{listar("deparment")}
    const handlecursolist=()=>{listar("course")}
    const handlecarreralist=()=>{listar("carreer")}
+  const handlematriculalist=()=>{listar("enrollment")}
+  const handlematerialist=()=>{listar("subject")}
+  const handleuserlist=()=>{listar("user")}
+
 
 
    function listar(urlfinal){
@@ -78,7 +95,12 @@ export const Addothers = ()=>{
        if(urlfinal ==="faculty"){SetFacultades(response.data.result)}
        if(urlfinal ==="carreer"){SetCarreras(response.data.result)}
        if(urlfinal ==="course"){SetCursos(response.data.result)}
+       if(urlfinal ==="subject"){SetMaterias(response.data.result)}
+       if(urlfinal ==="deparment"){SetDepartamentos(response.data.result)}
+       if(urlfinal ==="semester"){SetSemestres(response.data.result)}
+       if(urlfinal ==="user"){SetUsers(response.data.result)}
         console.log(response.data.result);    
+        console.log(urlfinal); 
         
     
        
@@ -166,7 +188,7 @@ headers: {
 
 const handledepartamentos=()=>{
   const res = axios.post('https://proyectobd.onrender.com/api/deparment', {
-    nombre: departamentos,
+    nombre: departamento,
     
     facultad_id: facultades[valorselectcursos].id
 },{
@@ -176,6 +198,37 @@ headers: {
 }
 }).then((response)=>{console.log(response)})
 }
+
+
+const handlematricula=()=>{
+  const res = axios.post('https://proyectobd.onrender.com/api/enrollment', {
+    nombre: matricula,
+    
+    
+},{
+headers: {
+  "Content-Type": "application/json",
+  "Authorization" : `Bearer ${cookies.token}`
+}
+}).then((response)=>{console.log(response)})
+}
+
+const  handlemateria=()=>{
+  const res = axios.post('https://proyectobd.onrender.com/api/subject', {
+    nombre: materia,
+    departamento_id: departamentos[valorselectdepartamento].id,
+    semestre_id: semestres[valorselectsemestre].id,
+    profesor_id : users[valorselectuser].id
+},{
+headers: {
+  "Content-Type": "application/json",
+  "Authorization" : `Bearer ${cookies.token}`
+}
+}).then((response)=>{console.log(response)})
+}
+
+
+
 
  
 
@@ -324,7 +377,7 @@ headers: {
 
             <FormControl pb={6}>
               <FormLabel >Añadir Departamentos</FormLabel>
-              <Input  value={departamentos} onChange={(e)=>{SetDepartamentos(e.target.value)}} marginBottom='15px' id="nom" placeholder="Nombre" name="nombre" />
+              <Input  value={departamento} onChange={(e)=>{SetDepartamento(e.target.value)}} marginBottom='15px' id="nom" placeholder="Nombre" name="nombre" />
               <Select onClick={handlefacultadlist} value={valorselectfacultades} onChange={(e)=>{SetValorselectfacultades(e.target.value) ;}} marginBottom="7px" placeholder='Seleccionar una Facultad primero'>
                 {facultades.map((f,i)=>{
                   return(
@@ -346,6 +399,66 @@ headers: {
             <Divider m={3}/>
             </FormControl>
 
+
+
+            <FormControl>
+              <FormLabel >Añadir Materia</FormLabel>
+              <Input value={materia} onChange={(e)=>{SetMateria(e.target.value)}} width='100%' marginBottom='15px' id="nom" placeholder="Nombre" name="nombre" />
+              <Select onClick={handledepartamentoslist} value={valorselectdepartamento} onChange={(e)=>{SetValorselectdepartamento(e.target.value) ;}} marginBottom="7px" placeholder='Seleccionar un Departamento primero'>
+                {departamentos.map((d,i)=>{
+                  return(
+                  <option value={i} key={i}>{d.nombre}</option>
+                   
+                   )
+                })}</Select>
+
+<Select onClick={handlesemestrelist} value={valorselectsemestre} onChange={(e)=>{SetValorselectsemestre(e.target.value) ;}} marginBottom="7px" placeholder='Selecionar un semestre'>
+                {semestres.map((s,i)=>{
+                  return(
+                  <option value={i} key={i}>{s.nombre }</option>
+                   
+                   )
+                })}
+  
+</Select>
+
+
+<Select onClick={handleuserlist} value={valorselectuser} onChange={(e)=>{SetValorselectuser(e.target.value) ;}} marginBottom="7px" placeholder='Selecionar un profesor'>
+                {users.map((u,i)=>{
+                  return(
+                 u.rol_id===13 && <option value={i} key={i}>{u.name }</option>
+                
+                   )
+                })}
+  
+</Select>
+              <Button onClick={handlemateria} marginBottom='7px' colorScheme="blue" mr={3}>
+              Guardar
+            </Button>
+            <Button onClick={handlematerialist} marginBottom='7px' colorScheme="blue" mr={3}>
+              Listar
+            </Button>
+            <Button onClick={handlemateriaeliminar} marginBottom='7px' colorScheme="blue" mr={3}>
+              Eliminar
+            </Button>
+            <Divider m={3}/>
+            </FormControl>
+
+
+            <FormControl>
+              <FormLabel >Añadir Matricula</FormLabel>
+              <Input value={matricula} onChange={(e)=>{SetMatricula(e.target.value)}} width='100%' marginBottom='15px' id="nom" placeholder="Nombre" name="nombre" />
+              <Button onClick={handlematricula} marginBottom='7px' colorScheme="blue" mr={3}>
+              Guardar
+            </Button>
+            <Button onClick={handlematriculalist} marginBottom='7px' colorScheme="blue" mr={3}>
+              Listar
+            </Button>
+            <Button onClick={handlematriculaeliminar} marginBottom='7px' colorScheme="blue" mr={3}>
+              Eliminar
+            </Button>
+            <Divider m={3}/>
+            </FormControl>
 
            
 

@@ -22,7 +22,9 @@ import { enqueueSnackbar } from "notistack";
 
 export const Add = ({ variable,type }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();  
-
+let rol_id = 0
+if(type==="Estudiante"){ rol_id = 12}
+if(type==="Profesor"){ rol_id = 13}
 
 
 
@@ -32,26 +34,26 @@ export const Add = ({ variable,type }) => {
 
   const[centros,SetCentros]=useState([])
   const[departamentos,SetDepartamentos]=useState([])
-
+const [esRepitente,SetEsRepitente] = useState(false)
 
   const[valorselectcentros,SetValorselectcentros]=useState();
   const[valorselectdepartamentos,SetValorselectdepartamentos]=useState();
-
+  const[typo_profesor_id,SetTypo_profesor_id]=useState();
 
   const handlecentrolist=()=>{listar("center")}
   const handledepartamentoslist=()=>{listar("deparment")}
 
 
   const handleprofesor=()=>{
-    const res = axios.post('https://proyectobd.onrender.com/api/create-professor', {
+    const res = axios.post('https://proyectobd.onrender.com/api/auth/create-professor', {
       name: nom.value,
       surname: ape.value,
       email: email.value,
       password: password.value,
       ci: ci.value,
       centro_id : centros[valorselectcentros].id,
-      typo_profesor_id : typography.value,
-     rol_id: type,
+      typo_profesor_id :  typo_profesor_id,
+     rol_id: rol_id,
      departamento_id : departamentos[valorselectdepartamentos].id
 
 
@@ -63,14 +65,14 @@ export const Add = ({ variable,type }) => {
   }).then((response)=>{console.log(response)})
   }
   const handleestudiante=()=>{
-    const res = axios.post('https://proyectobd.onrender.com/api/create-student', {
+    const res = axios.post('https://proyectobd.onrender.com/api/auth/create-student', {
       name: nom.value,
       surname: ape.value,
       password: password.value,
       email: email.value,
       ci: ci.value,
       centro_id : centro.value,
-     rol_id: type,
+     rol_id: rol_id,
      esRepitente: esRepitente.value,
      matricula_id: matricula.value
 
@@ -168,8 +170,19 @@ export const Add = ({ variable,type }) => {
 
             {type==="Profesor" && <FormControl pb={6} isRequired>
               <FormLabel>Tipo de profesor</FormLabel>
-              <Input id="typo" placeholder="CP o CF" name="Asignatura" />
+              <Select pb={6} marginTop={5}  value={typo_profesor_id} onChange={(e)=>{SetTypo_profesor_id(e.target.value) ;}} marginBottom="7px" placeholder='Selecionar un Tipo de profesor'>
+                
+                  <option value={4} >Conferencia</option>
+                  <option value={5} >Clase Practica</option>
+                  <option value={6} >Jefe de departamento</option>
+                   
+                
+  
+              </Select>
+           
             </FormControl>}
+
+
 
 
             <Select pb={6} marginTop={5} onClick={handlecentrolist} value={valorselectcentros} onChange={(e)=>{SetValorselectcentros(e.target.value) ;}} marginBottom="7px" placeholder='Selecionar un centro'>
@@ -181,6 +194,17 @@ export const Add = ({ variable,type }) => {
                 })}
   
               </Select>
+
+              {type==="Estudiante" &&<>
+              <FormLabel>Es Repitente</FormLabel>
+              <Select pb={6} marginTop={5}  value={esRepitente} onChange={(e)=>{SetEsRepitente(e.target.value) ;}} marginBottom="7px" >
+               
+                  <option value={false} >No</option>
+                  <option value={true} >Si</option>
+                   
+                
+  
+              </Select></>}
 
               {type==="Profesor" && <Select pb={6} marginTop={5} onClick={handledepartamentoslist} value={valorselectdepartamentos} onChange={(e)=>{SetValorselectdepartamentos(e.target.value) ;}} marginBottom="7px" placeholder='Selecionar un departamento '>
                 {departamentos.map((departamento,i)=>{

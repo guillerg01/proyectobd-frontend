@@ -25,9 +25,9 @@ export const Getpeople = ({profesor,esajustes}) => {
       "Content-Type": "application/json",
       "Authorization" : `Bearer ${cookies.token}`
   }
-    }).then((res) =>{
-      const profesor = res.data.result[0]
-    console.log(profesor)
+    }).then((res) =>{console.log(res);
+    //   const profesor = res.data.result[0]
+    // console.log(profesor)
   }
     )}, {
       keepPreviousData: true,
