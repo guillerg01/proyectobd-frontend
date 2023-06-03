@@ -14,24 +14,24 @@ export const ContenTable = ({nombre,apellidos,valor ,id,esajustes})=>{
     const finalRef = React.useRef(null)
      
 
-    // const res2 = axios.get(`https://proyectobd.onrender.com/api/assistence/get/${id}`, {
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     "Authorization" : `Bearer ${cookies.token}`
-    // }
-    //   }).then((response) => {
-    //     // console.log(response) 
-    //   })
+    const res2 = axios.get(`https://proyectobd.onrender.com/api/assistence/get/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization" : `Bearer ${cookies.token}`
+    }
+      }).then((response) => {
+        // console.log(response) 
+      })
 
-      const res2 = axios.get(`https://proyectobd.onrender.com/api/user/students`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization" : `Bearer ${cookies.token}`
-      }
-        }).then((response) => {
-          console.log("estudiantes")
-          console.log(response) 
-        })
+      // const res2 = axios.get(`https://proyectobd.onrender.com/api/user/students`, {
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     "Authorization" : `Bearer ${cookies.token}`
+      // }
+      //   }).then((response) => {
+      //     console.log("estudiantes")
+      //     console.log(response) 
+      //   })
   
 
 
