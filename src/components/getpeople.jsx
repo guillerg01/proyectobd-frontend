@@ -28,6 +28,7 @@ export const Getpeople = ({profesor,esajustes}) => {
     }).then((res) =>{ 
       SetUsers(res.data.result)
   console.log(users)
+  console.log("usuarios")
   }
     )}, {
       keepPreviousData: true,
