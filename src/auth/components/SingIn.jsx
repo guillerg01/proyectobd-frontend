@@ -86,7 +86,10 @@ function SingIn(){
 
                
 
-              }).catch((error) => { enqueueSnackbar("Error de Usuario o Contraseña"),{
+              }).catch((error) => {
+                console.log(error);
+                
+                enqueueSnackbar("Error de Usuario o Contraseña"),{
                 persist: false,
                 variant:"error"
               }; 
@@ -98,6 +101,7 @@ function SingIn(){
         
       })
       .catch((error) => {
+        console.log(error);
         enqueueSnackbar("Error de Usuario o Contraseña"),{
             persist: false,
             variant: "error"
